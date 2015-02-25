@@ -1,7 +1,6 @@
 'use strict'
 ################################################################################
 # Define Maybe monad
-
 _bind = (f) -> switch this
   when Nothing then Nothing
   else f this.val
@@ -30,11 +29,13 @@ angular.module('pernas.example', [])
       #   true
 
         restrict: 'E'
-        template: 'Hola {{name}}, com va?'
+        template: 'Hola {{nom}}, com va?'
         controller: [
             '$scope'
             ($scope) ->
               $scope.name = "Jaume"
+              $scope.MaybeName = Just "Enric"
+              $scope.nom = $scope.MaybeName.val
           ]
         }
   ])
