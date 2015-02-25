@@ -3,7 +3,7 @@
   'use strict';
   var Just, Nothing, ref;
 
-  ref = require('coffee-monad'), Nothing = ref.Nothing, Just = ref.Just;
+  ref = require('Maybe'), Nothing = ref.Nothing, Just = ref.Just;
 
   angular.module('pernas.example', []).directive('example', [
     '$timeout', function($timeout) {

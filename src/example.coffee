@@ -1,5 +1,5 @@
 'use strict'
-{Nothing, Just} = require 'coffee-monad'
+{Nothing, Just} = require 'Maybe'
 
 angular.module('pernas.example', [])
   .directive('example', [
