@@ -20,25 +20,61 @@ angular.module('pernas.example', [])
       'EntropyService'
       (EntropyService) ->
         {
-      # snakeCase = (input) -> input.replace /[A-Z]/g, ($1) -> "_#{$1.toLowerCase()}"
-      # isEmpty = (value) ->
-      #   if angular.isArray(value)
-      #     return value.length is 0
-      #   else if angular.isObject(value)
-      #     return false for key of value when value.hasOwnProperty(key)
-      #   true
 
         restrict: 'E'
-        template: 'Hola {{nom}}, com va? tens {{punts}} punts'
+        template: '<div ng-show="password" class="progress"> \
+                     <div class="progress-bar" \
+                          ng-class=colorBar \
+                          role="progressbar" \
+                          aria-valuenow="{{H}}"" \
+                          aria-valuemin="0" \
+                          aria-valuemax="100" \
+                          ng-style="{width: H + \'%\'}" > \
+                       {{veredict(H)}}\
+                     </div>\
+                    </div>'
         controller: [
             '$scope'
             ($scope) ->
-              $scope.name = "Jaume"
-              $scope.MaybeName = Just "Enric"
-              $scope.nom = $scope.MaybeName.val
-              $scope.entropy = EntropyService.entropy
-              $scope.punts = $scope.entropy($scope.nom)
+
+            $scope.H = 0
+            $scope.colorBar = 'progress-bar-danger'
+            defaultOpt = 
+              '0': [
+                'progress-bar-danger'
+                'weak'
+              ]
+              '25': [
+                'progress-bar-warning'
+                'regular'
+              ]
+              '50': [
+                'progress-bar-info'
+                'normal'
+              ]
+              '75': [
+                'progress-bar-success'
+                'strong'
+              ]
+            $scope.optionsUsed = $scope.options or defaultOpt
+
+            $scope.veredict = (H) ->
+              message = ''
+              for key of $scope.optionsUsed
+                if $scope.optionsUsed.hasOwnProperty(key)
+                  if H > key
+                    $scope.colorBar = $scope.optionsUsed[key][0]
+                    message = $scope.optionsUsed[key][1]
+              message
+
+            $scope.entropy = EntropyService.entropy
+            $scope.$watch 'password', (newValue, oldValue) ->
+              $scope.H = $scope.entropy(newValue)
+              return
           ]
+        scope:
+            password: '='
+            options: '='
         }
   ])
   ##############################################################################
