@@ -46,62 +46,101 @@
       };
     }
   ]).factory('EntropyService', function() {
-    var H, badPatterns, hasLowerCase, hasNumbers, hasPunctuation, hasUpperCase, password;
+    var H, base, entropy2, entropyWeighted, hasDigits, hasLowerCase, hasPunctuation, hasUpperCase, maybePassword, password, patternsList, quality, scorePassword;
     H = 0;
     password = '';
+    Math.log2 = function(x) {
+      return Math.log(x) / Math.LN2;
+    };
+    hasDigits = function(str) {
+      return /[0-9]/.test(str);
+    };
     hasLowerCase = function(str) {
       return /[a-z]/.test(str);
     };
     hasUpperCase = function(str) {
       return /[A-Z]/.test(str);
     };
-    hasNumbers = function(str) {
-      return /[0-9]/.test(str);
-    };
     hasPunctuation = function(str) {
-      return /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/.test(str);
+      return /[-!$%^&*()_+|~=`{}\[\]:";'<>?@,.\/]/.test(str);
     };
-    badPatterns = function(pass, H) {
-      var entropy, patterns;
-      patterns = [/^\d+$/, /^[a-z]+\d$/, /^[A-Z]+\d$/, /^[a-zA-Z]+\d$/, /^[a-z]+\d+$/, /^[a-z]+$/, /^[A-Z]+$/, /^[A-Z][a-z]+$/, /^[A-Z][a-z]+\d$/, /^[A-Z][a-z]+\d+$/, /^[a-z]+[._!\- @*#]$/, /^[A-Z]+[._!\- @*#]$/, /^[a-zA-Z]+[._!\- @*#]$/, /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/, /^[a-z\-ZA-Z0-9.-]+$/];
-      entropy = H;
-      angular.forEach(patterns, function(pattern) {
-        if (pattern.test(pass)) {
-          entropy = entropy / 2;
+    base = function(str) {
+      var b, bases, t, tuples;
+      tuples = [[10, hasDigits(str)], [26, hasLowerCase(str)], [26, hasUpperCase(str)], [31, hasPunctuation(str)]];
+      bases = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = tuples.length; i < len; i++) {
+          t = tuples[i];
+          if (t[1]) {
+            results.push(t[0]);
+          }
         }
+        return results;
+      })();
+      b = bases.reduce((function(t, s) {
+        return t + s;
+      }), 0);
+      if (b === 0) {
+        return 1;
+      } else {
+        return b;
+      }
+    };
+    maybePassword = function(str) {
+      if (str === "" || (str == null) || (typeof str) !== 'string') {
+        return Nothing;
+      } else {
+        return Just(str);
+      }
+    };
+    entropy2 = function(str) {
+      return maybePassword(str).bind(function(pw) {
+        return Just(Math.log2(Math.pow(base(pw), pw.length)));
       });
-      return entropy;
+    };
+    patternsList = [[0.5, /^\d+$/], [0.5, /^[a-z]+\d$/], [0.5, /^[A-Z]+\d$/], [0.75, /^[a-zA-Z]+\d$/], [0.75, /^[a-z]+\d+$/], [0.5, /^[a-z]+$/], [0.5, /^[A-Z]+$/], [0.5, /^[A-Z][a-z]+$/], [0.5, /^[A-Z][a-z]+\d$/], [0.75, /^[A-Z][a-z]+\d+$/], [0.5, /^[a-z]+[._!\- @*#]$/], [0.5, /^[A-Z]+[._!\- @*#]$/], [0.75, /^[a-zA-Z]+[._!\- @*#]$/], [0.5, /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/], [1, /^.*$/]];
+    quality = function(str, patterns) {
+      var p;
+      return Math.min.apply(this, (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = patterns.length; i < len; i++) {
+          p = patterns[i];
+          if (p[1].test(str)) {
+            results.push(p[0]);
+          }
+        }
+        return results;
+      })());
+    };
+    entropyWeighted = function(str, patterns) {
+      return (entropy2(str)).bind(function(e) {
+        return Just(e * quality(str, patterns));
+      });
+    };
+    scorePassword = function(str) {
+      var s;
+      s = entropyWeighted(str, patternsList);
+      switch (s) {
+        case Nothing:
+          return 0;
+        default:
+          if (s.val > 100) {
+            return 100;
+          } else {
+            return s.val;
+          }
+      }
     };
     return {
       entropy: function(pass) {
-        var base;
-        if (angular.isUndefined(pass)) {
-          H = 0;
-          password = '';
+        if (pass !== password) {
+          password = pass;
+          return H = scorePassword(pass);
         } else {
-          if (pass !== password) {
-            base = 0;
-            password = pass;
-            if (hasLowerCase(pass)) {
-              base += 26;
-            }
-            if (hasUpperCase(pass)) {
-              base += 26;
-            }
-            if (hasNumbers(pass)) {
-              base += 10;
-            }
-            if (hasPunctuation(pass)) {
-              base += 30;
-            }
-            H = Math.log2(Math.pow(base, pass.length));
-            H = badPatterns(pass, H);
-            if (H > 100) {
-              H = 100;
-            }
-          }
+          return H;
         }
-        return H;
       }
     };
   });
