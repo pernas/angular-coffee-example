@@ -1,0 +1,28 @@
+{
+  "name": "angular-coffee-example",
+  "version": "0.0.0",
+  "homepage": "https://github.com/pernas/angular-coffee-example",
+  "authors": [
+    "Jaume Pernas <jaume@pernas.cat>"
+  ],
+  "description": "angularjs directive example in coffeescript",
+  "main": "example.js",
+  "keywords": [
+    "angularjs",
+    "coffeescript",
+    "tutorial",
+    "directive"
+  ],
+  "license": "UNLICENSE",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+    "src"
+  ],
+  "dependencies": {
+    "angular": ">=1.2.0"
+  }
+}
