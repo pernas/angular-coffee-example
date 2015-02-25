@@ -23,7 +23,6 @@
     "src"
   ],
   "dependencies": {
-    "angular": ">=1.2.0",
-    "coffee-monad": ">=0.1.5"
+    "angular": ">=1.2.0"
   }
 }
