@@ -33,10 +33,12 @@
     '$timeout', function($timeout) {
       return {
         restrict: 'E',
-        template: 'Hola {{name}}, com va?',
+        template: 'Hola {{nom}}, com va?',
         controller: [
           '$scope', function($scope) {
-            return $scope.name = "Jaume";
+            $scope.name = "Jaume";
+            $scope.MaybeName = Just("Enric");
+            return $scope.nom = $scope.MaybeName.val;
           }
         ]
       };
