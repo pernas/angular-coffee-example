@@ -31,18 +31,36 @@
 
   angular.module('pernas.example', []).directive('example', [
     'EntropyService', function(EntropyService) {
+      var defaultOpt;
       return {
         restrict: 'E',
-        template: 'Hola {{nom}}, com va? tens {{punts}} punts',
+        template: '<div ng-show="password" class="progress"> <div class="progress-bar" ng-class=colorBar role="progressbar" aria-valuenow="{{H}}"" aria-valuemin="0" aria-valuemax="100" ng-style="{width: H + \'%\'}" > {{veredict(H)}}</div></div>',
         controller: [
-          '$scope', function($scope) {
-            $scope.name = "Jaume";
-            $scope.MaybeName = Just("Enric");
-            $scope.nom = $scope.MaybeName.val;
-            $scope.entropy = EntropyService.entropy;
-            return $scope.punts = $scope.entropy($scope.nom);
-          }
-        ]
+          '$scope', function($scope) {}, $scope.H = 0, $scope.colorBar = 'progress-bar-danger', defaultOpt = {
+            '0': ['progress-bar-danger', 'weak'],
+            '25': ['progress-bar-warning', 'regular'],
+            '50': ['progress-bar-info', 'normal'],
+            '75': ['progress-bar-success', 'strong']
+          }, $scope.optionsUsed = $scope.options || defaultOpt, $scope.veredict = function(H) {
+            var key, message;
+            message = '';
+            for (key in $scope.optionsUsed) {
+              if ($scope.optionsUsed.hasOwnProperty(key)) {
+                if (H > key) {
+                  $scope.colorBar = $scope.optionsUsed[key][0];
+                  message = $scope.optionsUsed[key][1];
+                }
+              }
+            }
+            return message;
+          }, $scope.entropy = EntropyService.entropy, $scope.$watch('password', function(newValue, oldValue) {
+            $scope.H = $scope.entropy(newValue);
+          })
+        ],
+        scope: {
+          password: '=',
+          options: '='
+        }
       };
     }
   ]).factory('EntropyService', function() {
