@@ -1,3 +1,6 @@
+'use strict'
+{Nothing, Just} = require 'coffee-monad'
+
 angular.module('pernas.example', [])
   .directive('example', [
       '$timeout'
@@ -12,6 +15,11 @@ angular.module('pernas.example', [])
       #   true
 
         restrict: 'E'
-        template: 'HOLA TIO'
+        template: 'Hola {{name}}, com va?'
+        controller: [
+            '$scope'
+            ($scope) ->
+              $scope.name = "Jaume"
+          ]
         }
   ])
