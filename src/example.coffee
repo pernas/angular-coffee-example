@@ -56,9 +56,7 @@ angular.module('pernas.example', [])
               message
 
             $scope.entropy = EntropyService.entropeus
-            $scope.$watch 'password', (newValue, oldValue) ->
-              $scope.H = $scope.entropy(newValue)
-              return
+            $scope.$watch('password', (newValue, oldValue) -> $scope.H = $scope.entropy newValue)
           ]
         scope:
             password: '='

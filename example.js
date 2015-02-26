@@ -61,7 +61,7 @@
             };
             $scope.entropy = EntropyService.entropeus;
             return $scope.$watch('password', function(newValue, oldValue) {
-              $scope.H = $scope.entropy(newValue);
+              return $scope.H = $scope.entropy(newValue);
             });
           }
         ],
