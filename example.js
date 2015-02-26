@@ -80,7 +80,7 @@
           checkEntropy = function(viewValue) {
             var H, minimumEntropy;
             minimumEntropy = parseFloat(attrs.minEntropy);
-            H = EntropyService2.entropy(viewValue);
+            H = EntropyService2.entropeus(viewValue);
             if (H > minimumEntropy) {
               ctrl.$setValidity('minEntropy', true);
             } else {
