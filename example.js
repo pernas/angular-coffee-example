@@ -30,10 +30,10 @@
   };
 
   angular.module('pernas.example', []).directive('example', [
-    'EntropyService', function(EntropyService) {
+    'EntropyService2', function(EntropyService2) {
       return {
         restrict: 'E',
-        template: '<div ng-show="password" class="progress"> <div class="progress-bar" ng-class=colorBar role="progressbar" aria-valuenow="{{H}}"" aria-valuemin="0" aria-valuemax="100" ng-style="{width: H + \'%\'}" > {{veredict(H)}}</div></div>',
+        template: '<div ng-show="password" class="progress"> <div class="progress-bar" ng-class=colorBar role="progressbar" aria-valuenow="{{H}}"" aria-valuemin="0" aria-valuemax="100" ng-style="{width: H + \'%\'}" > {{veredict(H)}}</div></div><span>{{H}}</span>',
         controller: [
           '$scope', function($scope) {
             var defaultOpt;
@@ -59,7 +59,7 @@
               }
               return message;
             };
-            $scope.entropy = EntropyService.entropeus;
+            $scope.entropy = EntropyService2.entropeus;
             return $scope.$watch('password', function(newValue, oldValue) {
               return $scope.H = $scope.entropy(newValue);
             });
@@ -71,7 +71,7 @@
         }
       };
     }
-  ]).factory('EntropyService', function() {
+  ]).factory('EntropyService2', function() {
     var H, base, entropy2, entropyWeighted, hasDigits, hasLowerCase, hasPunctuation, hasUpperCase, maybePassword, password, patternsList, quality, scorePassword;
     H = 0;
     password = '';

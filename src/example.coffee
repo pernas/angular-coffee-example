@@ -17,8 +17,8 @@ Just = (input)-> if input? then _unit input else Nothing
 
 angular.module('pernas.example', [])
   .directive('example', [
-      'EntropyService'
-      (EntropyService) ->
+      'EntropyService2'
+      (EntropyService2) ->
         {
 
         restrict: 'E'
@@ -32,7 +32,8 @@ angular.module('pernas.example', [])
                           ng-style="{width: H + \'%\'}" > \
                        {{veredict(H)}}\
                      </div>\
-                    </div>'
+                    </div>\
+                    <span>{{H}}</span>'
         controller: [
           '$scope'
           ($scope) ->
@@ -55,7 +56,7 @@ angular.module('pernas.example', [])
                     message = $scope.optionsUsed[key][1]
               message
 
-            $scope.entropy = EntropyService.entropeus
+            $scope.entropy = EntropyService2.entropeus
             $scope.$watch('password', (newValue, oldValue) -> $scope.H = $scope.entropy newValue)
           ]
         scope:
@@ -65,8 +66,7 @@ angular.module('pernas.example', [])
     }])
   ##############################################################################
   # Entropy service
-  .factory 'EntropyService', ->
-
+  .factory 'EntropyService2', ->
     # service state
     H = 0
     password = ''
