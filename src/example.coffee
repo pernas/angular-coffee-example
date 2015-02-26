@@ -38,23 +38,12 @@ angular.module('pernas.example', [])
           ($scope) ->
             $scope.H = 0
             $scope.colorBar = 'progress-bar-danger'
-            defaultOpt = 
-              '0': [
-                'progress-bar-danger'
-                'weak'
-              ]
-              '25': [
-                'progress-bar-warning'
-                'regular'
-              ]
-              '50': [
-                'progress-bar-info'
-                'normal'
-              ]
-              '75': [
-                'progress-bar-success'
-                'strong'
-              ]
+            defaultOpt = {
+              '0':  ['progress-bar-danger', 'weak yeah'],
+              '25': ['progress-bar-warning', 'regular'],
+              '50': ['progress-bar-info', 'normal'],
+              '75': ['progress-bar-success', 'strong']
+            }
             $scope.optionsUsed = $scope.options or defaultOpt
 
             $scope.veredict = (H) ->
