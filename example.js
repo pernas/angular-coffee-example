@@ -40,7 +40,7 @@
             $scope.H = 0;
             $scope.colorBar = 'progress-bar-danger';
             defaultOpt = {
-              '0': ['progress-bar-danger', 'weak'],
+              '0': ['progress-bar-danger', 'weak yeah'],
               '25': ['progress-bar-warning', 'regular'],
               '50': ['progress-bar-info', 'normal'],
               '75': ['progress-bar-success', 'strong']
