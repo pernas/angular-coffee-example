@@ -65,7 +65,32 @@ angular.module('pernas.example', [])
         
     }])
   ##############################################################################
+  # validation rule
+
+  .directive('minEntropy', [
+    'EntropyService2'
+    (EntropyService2) ->
+      {
+        require: 'ngModel'
+        link: (scope, elem, attrs, ctrl) ->
+  
+          checkEntropy = (viewValue) ->
+            minimumEntropy = parseFloat(attrs.minEntropy)
+            H = EntropyService2.entropy(viewValue)
+            if H > minimumEntropy
+              ctrl.$setValidity 'minEntropy', true
+            else
+              ctrl.$setValidity 'minEntropy', false
+            viewValue
+  
+          ctrl.$parsers.unshift checkEntropy
+          return
+  
+      }
+  ])
+  ##############################################################################
   # Entropy service
+
   .factory 'EntropyService2', ->
     # service state
     H = 0

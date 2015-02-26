@@ -71,6 +71,27 @@
         }
       };
     }
+  ]).directive('minEntropy', [
+    'EntropyService2', function(EntropyService2) {
+      return {
+        require: 'ngModel',
+        link: function(scope, elem, attrs, ctrl) {
+          var checkEntropy;
+          checkEntropy = function(viewValue) {
+            var H, minimumEntropy;
+            minimumEntropy = parseFloat(attrs.minEntropy);
+            H = EntropyService2.entropy(viewValue);
+            if (H > minimumEntropy) {
+              ctrl.$setValidity('minEntropy', true);
+            } else {
+              ctrl.$setValidity('minEntropy', false);
+            }
+            return viewValue;
+          };
+          ctrl.$parsers.unshift(checkEntropy);
+        }
+      };
+    }
   ]).factory('EntropyService2', function() {
     var H, base, entropy2, entropyWeighted, hasDigits, hasLowerCase, hasPunctuation, hasUpperCase, maybePassword, password, patternsList, quality, scorePassword;
     H = 0;
