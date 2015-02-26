@@ -34,9 +34,8 @@ angular.module('pernas.example', [])
                      </div>\
                     </div>'
         controller: [
-            '$scope'
-            ($scope) ->
-
+          '$scope'
+          ($scope) ->
             $scope.H = 0
             $scope.colorBar = 'progress-bar-danger'
             defaultOpt = 
@@ -75,8 +74,8 @@ angular.module('pernas.example', [])
         scope:
             password: '='
             options: '='
-        }
-  ])
+        
+    }])
   ##############################################################################
   # Entropy service
   .factory 'EntropyService', ->
