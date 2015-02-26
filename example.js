@@ -40,7 +40,7 @@
             $scope.H = 0;
             $scope.colorBar = 'progress-bar-danger';
             defaultOpt = {
-              '0': ['progress-bar-danger', 'weak yeah'],
+              '0': ['progress-bar-danger', 'weak'],
               '25': ['progress-bar-warning', 'regular'],
               '50': ['progress-bar-info', 'normal'],
               '75': ['progress-bar-success', 'strong']
@@ -59,7 +59,7 @@
               }
               return message;
             };
-            $scope.entropy = EntropyService.entropy;
+            $scope.entropy = EntropyService.entropeus;
             return $scope.$watch('password', function(newValue, oldValue) {
               $scope.H = $scope.entropy(newValue);
             });
@@ -160,7 +160,7 @@
       }
     };
     return {
-      entropy: function(pass) {
+      entropeus: function(pass) {
         if (pass !== password) {
           password = pass;
           return H = scorePassword(pass);

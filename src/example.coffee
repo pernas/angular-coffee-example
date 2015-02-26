@@ -39,7 +39,7 @@ angular.module('pernas.example', [])
             $scope.H = 0
             $scope.colorBar = 'progress-bar-danger'
             defaultOpt = {
-              '0':  ['progress-bar-danger', 'weak yeah'],
+              '0':  ['progress-bar-danger', 'weak'],
               '25': ['progress-bar-warning', 'regular'],
               '50': ['progress-bar-info', 'normal'],
               '75': ['progress-bar-success', 'strong']
@@ -55,7 +55,7 @@ angular.module('pernas.example', [])
                     message = $scope.optionsUsed[key][1]
               message
 
-            $scope.entropy = EntropyService.entropy
+            $scope.entropy = EntropyService.entropeus
             $scope.$watch 'password', (newValue, oldValue) ->
               $scope.H = $scope.entropy(newValue)
               return
@@ -130,7 +130,7 @@ angular.module('pernas.example', [])
             when Nothing then 0
             else (if s.val > 100 then 100 else s.val) 
 
-    { entropy: (pass) -> 
+    { entropeus: (pass) -> 
                  if pass isnt password 
                     password = pass
                     H = scorePassword(pass)
